@@ -21,7 +21,7 @@
  *  vecodin_ps(vecname, position, element): place and shift; places new 'element' at index 'index' after shifting pre-existing values to the right
  *  vecodin_cp(vec1, vec2): copies the content of 'vec2' into 'vec1'
  *  vecodin_range(vecname, s, e, destination): takes 'vecname' vector's sub-vector that ranges from index 's' to index 'e' (both inclusive) and stores it in 'destination' vector
- *  vecodin_cat(vec1, vec2, destination): stores in 'destination' vector the result of the concatenation of 'vec1' and 'vec2' vectors [TODO]
+ *  vecodin_cat(vec1, vec2, destination): stores in 'destination' vector the result of the concatenation of 'vec1' and 'vec2' vectors
  */
 
 /*
@@ -238,7 +238,6 @@
  *  vecodin_cat: concatenates 'vec1' and 'vec2' and stores the result in 'destination';
  *  'destination' can be even 'vec1' or 'vec2';
  */
-// [TODO] Adjust for loop logic
 #define vecodin_cat(vec1, vec2, destination) \
     { \
         vecodin_intermediate_destination_size = vecodin_##vec1##_size + vecodin_##vec2##_size; \
@@ -247,7 +246,7 @@
         vecodin_##destination##_realloc_buffer = calloc(vecodin_intermediate_destination_size, sizeof(destination[0])); \
         if(!vecodin_##destination##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##destination##"); \
         else { \
-            for(size_t i = 0; i < vecodin_intermediate_destination_curs; ++i) vecodin_##destination##_realloc_buffer[i] = vecname[i+s]; \
+            for(size_t i = 0; i < vecodin_intermediate_destination_curs; ++i) vecodin_##destination##_realloc_buffer[i] = i < vecodin_##vec1##_curs ? vec1[i] : vec2[i]; \
             vecodin_##destination##_size = vecodin_intermediate_destination_size; \
             vecodin_##destination##_curs = vecodin_intermediate_destination_curs; \
             vecodin_##destination##_length = vecodin_intermediate_destination_length; \
