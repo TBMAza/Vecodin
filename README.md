@@ -57,7 +57,8 @@ vecodin_prepend(vecname, element)
 vecodin_rm(vecname, index)
 vecodin_rmh(vecname)        // Remove head
 vecodin_rmt(vecname)        // Remove tail
-vecodin_clear(vecname)
+vecodin_clear(vecname)       // Deletes content but keeps vector reusable
+vecodin_delete(vecname)         // Deletes content and makes vector no longer usable
 vecodin_ps(vecname, pos, element) // Place & shift
 vecodin_find(vecname, element, index_var)
 ```

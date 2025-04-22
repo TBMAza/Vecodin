@@ -15,6 +15,7 @@
  *  vecodin_append(vecname, element): inserts 'element' at the end of 'vecname' vector
  *  vecodin_prepend(vecname, element): inserts 'element' at the beginning of 'vecname' vector
  *  vecodin_clear(vecname): deletes all current elements in 'vecname' vector
+ *  vecodin_delete(vecname): deletes all of 'vecname' vector's content and makes it no longe usable: to use when you're sure to no longer need a vector and before program termination;
  *  vecodin_rmh(vecname): remove head; deletes 'vecname' vector's first element
  *  vecodin_rmt(vecname): remove tail; deletes 'vecname' vector's last element
  *  vecodin_rm(vecname, index): deletes element at index 'index' in 'vecname' vector
@@ -110,13 +111,29 @@
  */
 #define vecodin_clear(vecname) \
     { \
-        size_t vecodin_##vecname##_element_size = sizeof(vecname[0]); \
-        vecodin_##vecname##_size = 1; \
-        vecodin_##vecname##_curs = 0; \
-        vecodin_##vecname##_length = 0; \
-        free(vecname); \
-        vecname = calloc(1, vecodin_##vecname##_element_size); \
-        if(!vecname) { fprintf(stderr, "[vecodin] [CRITICAL] %s allocation failed!\n", "##vecname##"); }; \
+        if(vecodin_##vecname##_size != -1) { \
+            size_t vecodin_##vecname##_element_size = sizeof(vecname[0]); \
+            vecodin_##vecname##_size = 1; \
+            vecodin_##vecname##_curs = 0; \
+            vecodin_##vecname##_length = 0; \
+            free(vecname); \
+            vecname = calloc(1, vecodin_##vecname##_element_size); \
+            if(!vecname) { fprintf(stderr, "[vecodin] [CRITICAL] %s allocation failed!\n", "##vecname##"); }; \
+        } \
+    }
+
+/*
+ * vecodin_delete: deletes all of 'vecname' vector's content and sets it to NULL;
+ * this operation make 'vecname' no longer usable;
+ * it's best practice to call it before program termination on all vectors;
+ */
+#define vecodin_delete(vecname) \
+    { \
+        vecodin_##vecname##_size = -1; \
+        vecodin_##vecname##_curs = -1; \
+        vecodin_##vecname##_length = -1; \
+        if(vecname) { free(vecname); } \
+        vecname = NULL; \
     }
 
 /*
@@ -224,16 +241,18 @@
  */
 #define vecodin_cp(vec1, vec2) \
     { \
-        vecodin_##vec1##_realloc_buffer = calloc(vecodin_##vec2##_size, sizeof(vec1[0])); \
-        if(!vecodin_##vec1##_realloc_buffer) { fprintf(stderr, "[vecodin] [CRITICAL] %s resize failed!\n", "##vec1##"); } \
-        else { \
-            vecodin_##vec1##_size = vecodin_##vec2##_size; \
-            vecodin_##vec1##_curs = vecodin_##vec2##_curs; \
-            vecodin_##vec1##_length = vecodin_##vec2##_length; \
-            free(vec1); \
-            vec1 = vecodin_##vec1##_realloc_buffer; \
-            vecodin_##vec1##_realloc_buffer = NULL; \
-            for(size_t i = 0; i < vecodin_##vec2##_curs; ++i) { vec1[i] = vec2[i]; } \
+        if(vecodin_##vec1##_size != -1) { \
+            vecodin_##vec1##_realloc_buffer = calloc(vecodin_##vec2##_size, sizeof(vec1[0])); \
+            if(!vecodin_##vec1##_realloc_buffer) { fprintf(stderr, "[vecodin] [CRITICAL] %s resize failed!\n", "##vec1##"); } \
+            else { \
+                vecodin_##vec1##_size = vecodin_##vec2##_size; \
+                vecodin_##vec1##_curs = vecodin_##vec2##_curs; \
+                vecodin_##vec1##_length = vecodin_##vec2##_length; \
+                free(vec1); \
+                vec1 = vecodin_##vec1##_realloc_buffer; \
+                vecodin_##vec1##_realloc_buffer = NULL; \
+                for(size_t i = 0; i < vecodin_##vec2##_curs; ++i) { vec1[i] = vec2[i]; } \
+            } \
         } \
     }
 
@@ -242,7 +261,7 @@
  */
 #define vecodin_range(vecname, s, e, destination) \
     { \
-        if(s <= e) { \
+        if(vecodin_##destination##_size != -1 && s <= e) { \
             size_t vecodin_intermediate_destination_size = e - s + 2; \
             size_t vecodin_intermediate_destination_curs = e + 1; \
             size_t vecodin_intermediate_destination_length = e; \
@@ -266,19 +285,21 @@
  */
 #define vecodin_cat(vec1, vec2, destination) \
     { \
-        size_t vecodin_intermediate_destination_size = vecodin_##vec1##_size + vecodin_##vec2##_size; \
-        size_t vecodin_intermediate_destination_curs = vecodin_##vec1##_curs + vecodin_##vec2##_curs; \
-        size_t vecodin_intermediate_destination_length = vecodin_##vec1##_length + vecodin_##vec2##_length; \
-        vecodin_##destination##_realloc_buffer = calloc(vecodin_intermediate_destination_size, sizeof(destination[0])); \
-        if(!vecodin_##destination##_realloc_buffer) { fprintf(stderr, "[vecodin] [CRITICAL] %s resize failed!\n", "##destination##"); } \
-        else { \
-            for(size_t i = 0; i < vecodin_intermediate_destination_curs; ++i) { vecodin_##destination##_realloc_buffer[i] = i < vecodin_##vec1##_curs ? vec1[i] : vec2[i]; } \
-            vecodin_##destination##_size = vecodin_intermediate_destination_size; \
-            vecodin_##destination##_curs = vecodin_intermediate_destination_curs; \
-            vecodin_##destination##_length = vecodin_intermediate_destination_length; \
-            free(destination); \
-            destination = vecodin_##destination##_realloc_buffer; \
-            vecodin_##destination##_realloc_buffer = NULL; \
+        if(vecodin_##destination##_size != -1) { \
+            size_t vecodin_intermediate_destination_size = vecodin_##vec1##_size + vecodin_##vec2##_size; \
+            size_t vecodin_intermediate_destination_curs = vecodin_##vec1##_curs + vecodin_##vec2##_curs; \
+            size_t vecodin_intermediate_destination_length = vecodin_##vec1##_length + vecodin_##vec2##_length; \
+            vecodin_##destination##_realloc_buffer = calloc(vecodin_intermediate_destination_size, sizeof(destination[0])); \
+            if(!vecodin_##destination##_realloc_buffer) { fprintf(stderr, "[vecodin] [CRITICAL] %s resize failed!\n", "##destination##"); } \
+            else { \
+                for(size_t i = 0; i < vecodin_intermediate_destination_curs; ++i) { vecodin_##destination##_realloc_buffer[i] = i < vecodin_##vec1##_curs ? vec1[i] : vec2[i]; } \
+                vecodin_##destination##_size = vecodin_intermediate_destination_size; \
+                vecodin_##destination##_curs = vecodin_intermediate_destination_curs; \
+                vecodin_##destination##_length = vecodin_intermediate_destination_length; \
+                free(destination); \
+                destination = vecodin_##destination##_realloc_buffer; \
+                vecodin_##destination##_realloc_buffer = NULL; \
+            } \
         } \
     }
 
