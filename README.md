@@ -31,7 +31,7 @@ int main() {
 
 ---
 
-## 🔧 API Reference
+## API Reference
 
 ### Initialization
 ```c
