@@ -1,4 +1,4 @@
-# Vecodin – The Vicodin of Vectors 💊  
+# Vecodin – The Vicodin of Vectors
 **Type-agnostic dynamic arrays in C, without the pain.**
 
 Vecodin is a minimal, single-header C library that brings dynamic array functionality (vectors) to C in a type-agnostic, macro-based style. You can use it with any type — integers, floats, strings, structs, and more — while keeping full control over performance and memory.
@@ -20,14 +20,14 @@ int main() {
 
 ---
 
-## ✨ Features
+## Features
 
-- 📦 **Single header** – just drop it in your project
-- 💡 **Type-agnostic** – works with any C data type
-- 🧠 **Macro-based** – no structs, typedefs, or templates needed
-- 🧹 **Automatic resizing** – no manual reallocs
-- 🔁 **Reusability** – vectors can be cleared and reused
-- 🧪 **Well-tested** – with automated test coverage
+- **Single header** – just drop it in your project
+- **Type-agnostic** – works with any C data type
+- **Macro-based** – no structs, typedefs, or templates needed
+- **Automatic resizing** – no manual reallocs
+- **Reusability** – vectors can be cleared and reused
+- **Well-tested** – with automated test coverage
 
 ---
 
@@ -74,7 +74,7 @@ vecodin_cat(vec1, vec2, dest)                 // Concatenate into dest
 
 ---
 
-## 💡 Example: Using with Multiple Types
+## Example: Using with Multiple Types
 
 ```c
 vecodin_t(float, vf);
@@ -90,7 +90,7 @@ vecodin_append(vp, (Person){1, "Alice"});
 
 ---
 
-## 🧪 Testing
+## Testing
 
 The project includes two test files located in the `tests/` directory.
 
@@ -114,7 +114,7 @@ Tests include:
 
 ---
 
-## 🚫 Limitations
+## Limitations
 
 - Macros are **not scope-safe**: variables like `vecodin_<vecname>_length` are global.
 - No thread safety
@@ -123,13 +123,13 @@ Tests include:
 
 ---
 
-## 📄 License
+## License
 
 MIT License. Do what you want — but attribution is appreciated.
 
 ---
 
-## ✍️ Author
+## Author
 
 Crafted with painkillers and pointer arithmetic by Alfahad Asaduz.
 
