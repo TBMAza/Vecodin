@@ -5,7 +5,7 @@ Vecodin is a minimal, single-header C library that brings dynamic array function
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ```c
 #include "vecodin.h"
