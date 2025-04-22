@@ -67,7 +67,10 @@
     if(vecodin_##vecname##_curs >= vecodin_##vecname##_size) { \
         vecodin_##vecname##_size *= 2; \
         vecodin_##vecname##_realloc_buffer = realloc(vecname, sizeof(vecname[0]) * vecodin_##vecname##_size); \
-        if(!vecodin_##vecname##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+        if(!vecodin_##vecname##_realloc_buffer) { \
+            printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+            vecodin_##vecname##_size /= 2; \
+        } \
         else { \
             vecname = vecodin_##vecname##_realloc_buffer; \
             free(vecodin_##vecname##_realloc_buffer); \
@@ -87,7 +90,10 @@
     if(vecodin_##vecname##_curs >= vecodin_##vecname##_size) { \
         vecodin_##vecname##_size *= 2; \
         vecodin_##vecname##_realloc_buffer = realloc(vecname, sizeof(vecname[0]) * vecodin_##vecname##_size); \
-        if(!vecodin_##vecname##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+        if(!vecodin_##vecname##_realloc_buffer) { \
+            printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+            vecodin_##vecname##_size /= 2; \
+        } \
         else { \
             vecname = vecodin_##vecname##_realloc_buffer; \
             free(vecodin_##vecname##_realloc_buffer); \
@@ -119,7 +125,10 @@
     if(vecodin_##vecname##_curs < vecodin_##vecname##_size / 2) { \
         vecodin_##vecname##_size /= 2; \
         vecodin_##vecname##_realloc_buffer = realloc(vecname, sizeof(vecname[0]) * vecodin_##vecname##_size); \
-        if(!vecodin_##vecname##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+        if(!vecodin_##vecname##_realloc_buffer) { \
+            printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+            vecodin_##vecname##_size *= 2; \
+        } \
         else { \
             vecname = vecodin_##vecname##_realloc_buffer; \
             free(vecodin_##vecname##_realloc_buffer); \
@@ -137,7 +146,10 @@
     if(vecodin_##vecname##_curs < vecodin_##vecname##_size / 2) { \
         vecodin_##vecname##_size /= 2; \
         vecodin_##vecname##_realloc_buffer = realloc(vecname, sizeof(vecname[0]) * vecodin_##vecname##_size); \
-        if(!vecodin_##vecname##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+        if(!vecodin_##vecname##_realloc_buffer) { \
+            printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+            vecodin_##vecname##_size *= 2; \
+        } \
         else { \
             vecname = vecodin_##vecname##_realloc_buffer; \
             free(vecodin_##vecname##_realloc_buffer); \
@@ -156,7 +168,10 @@
     if(vecodin_##vecname##_curs < vecodin_##vecname##_size / 2) { \
         vecodin_##vecname##_size /= 2; \
         vecodin_##vecname##_realloc_buffer = realloc(vecname, sizeof(vecname[0]) * vecodin_##vecname##_size); \
-        if(!vecodin_##vecname##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+        if(!vecodin_##vecname##_realloc_buffer) { \
+            printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+            vecodin_##vecname##_size *= 2; \
+        } \
         else { \
             vecname = vecodin_##vecname##_realloc_buffer; \
             free(vecodin_##vecname##_realloc_buffer); \
@@ -176,7 +191,10 @@
     if(vecodin_##vecname##_curs >= vecodin_##vecname##_size) { \
         vecodin_##vecname##_size *= 2; \
         vecodin_##vecname##_realloc_buffer = realloc(vecname, sizeof(vecname[0]) * vecodin_##vecname##_size); \
-        if(!vecodin_##vecname##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+        if(!vecodin_##vecname##_realloc_buffer) { \
+            printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vecname##"); \
+            vecodin_##vecname##_size /= 2; \
+        } \
         else { \
             vecname = vecodin_##vecname##_realloc_buffer; \
             free(vecodin_##vecname##_realloc_buffer); \
@@ -186,38 +204,66 @@
 
 /*
  *  vecodin_cp: copiest the content of 'vec2' into 'vec1';
+ *  beware: the old content of 'vec1', if any, is erased;
  */
 #define vecodin_cp(vec1, vec2) \
-    vecodin_##vec1##_size = vecodin_##vec2##_size; \
-    vecodin_##vec1##_curs = vecodin_##vec2##_curs; \
-    vec1##_length = vec2##_length; \
-    vecodin_##vec1##_realloc_buffer = realloc(vec1, sizeof(vec1[0]) * vecodin_##vec1##_size); \
+    vecodin_##vec1##_realloc_buffer = realloc(vec1, sizeof(vec1[0]) * vecodin_##vec2##_size); \
     if(!vecodin_##vec1##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##vec1##"); \
     else { \
+        vecodin_##vec1##_size = vecodin_##vec2##_size; \
+        vecodin_##vec1##_curs = vecodin_##vec2##_curs; \
+        vec1##_length = vec2##_length; \
         vec1 = vecodin_##vec1##_realloc_buffer; \
         free(vecodin_##vec1##_realloc_buffer); \
         vecodin_##vec1##_realloc_buffer = NULL; \
-    } \
-    for(size_t i = 0; i < vec2##_curs; ++i) vec1[i] = vec2[i];
+        for(size_t i = 0; i < vec2##_curs; ++i) vec1[i] = vec2[i]; \
+    }
 
 /*
  *  vecodin_range: copies the content in the [s, e] inclusive range of indexes into 'destination', which can even be 'vecname' itself;
  */
 #define vecodin_range(vecname, s, e, destination) \
     if(s <= e) { \
-        vecodin_intermediate_size = e - s + 2; \
-        vecodin_intermediate_curs = e + 1; \
-        vecodin_intermediate_length = e; \
-        vecodin_##destination##_realloc_buffer = calloc(vecodin_intermediate_size, sizeof(destination[0])); \
-        for(size_t i = 0; i <= vecodin_intermediate_length; ++i) vecodin_##destination##_realloc_buffer[i] = vecname[i+s]; \
-        free(vecodin_##destination##_realloc_buffer); \
-        vecodin_##destination##_realloc_buffer = NULL; \
-        vecodin_##destination##_size = vecodin_intermediate_size; \
-        vecodin_##destination##_curs = vecodin_intermediate_curs; \
-        vecodin_##destination##_length = vecodin_intermediate_length; \
-        free(destination); \
-        destination = vecodin_##destination##_realloc_buffer; \
+        vecodin_intermediate_destination_size = e - s + 2; \
+        vecodin_intermediate_destination_curs = e + 1; \
+        vecodin_intermediate_destination_length = e; \
+        vecodin_##destination##_realloc_buffer = calloc(vecodin_intermediate_destination_size, sizeof(destination[0])); \
+        if(!vecodin_##destination##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##destination##"); \
+        else { \
+            for(size_t i = 0; i <= vecodin_intermediate_destination_length; ++i) vecodin_##destination##_realloc_buffer[i] = vecname[i+s]; \
+            free(vecodin_##destination##_realloc_buffer); \
+            vecodin_##destination##_realloc_buffer = NULL; \
+            vecodin_##destination##_size = vecodin_intermediate_destination_size; \
+            vecodin_##destination##_curs = vecodin_intermediate_destination_curs; \
+            vecodin_##destination##_length = vecodin_intermediate_destination_length; \
+            free(destination); \
+            destination = vecodin_##destination##_realloc_buffer; \
+        } \
     } \
     else printf("[vecodin] [ERROR] Invalid range. Operation aborted.\n");
+
+/*
+ *  vecodin_cat: concatenates 'vec1' and 'vec2' and stores the result in 'destination';
+ *  'destination' can be even 'vec1' or 'vec2';
+ */
+// [TODO] Adjust for loop logic
+#define vecodin_cat(vec1, vec2, destination) \
+    { \
+        vecodin_intermediate_destination_size = vecodin_##vec1##_size + vecodin_##vec2##_size; \
+        vecodin_intermediate_destination_curs = vecodin_##vec1##_curs + vecodin_##vec2##_curs; \
+        vecodin_intermediate_destination_length = vecodin_##vec1##_length + vecodin_##vec2##_length; \
+        vecodin_##destination##_realloc_buffer = calloc(vecodin_intermediate_destination_size, sizeof(destination[0])); \
+        if(!vecodin_##destination##_realloc_buffer) printf("[vecodin] [CRITICAL] %s resize failed!\n", "##destination##"); \
+        else { \
+            for(size_t i = 0; i <= vecodin_intermediate_destination_length; ++i) vecodin_##destination##_realloc_buffer[i] = vecname[i+s]; \
+            free(vecodin_##destination##_realloc_buffer); \
+            vecodin_##destination##_realloc_buffer = NULL; \
+            vecodin_##destination##_size = vecodin_intermediate_destination_size; \
+            vecodin_##destination##_curs = vecodin_intermediate_destination_curs; \
+            vecodin_##destination##_length = vecodin_intermediate_destination_length; \
+            free(destination); \
+            destination = vecodin_##destination##_realloc_buffer; \
+        } \
+    }
 
 #endif
