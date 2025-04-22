@@ -131,7 +131,7 @@ MIT License. Do what you want — but attribution is appreciated.
 
 ## Author
 
-Crafted with painkillers and pointer arithmetic by Alfahad Asaduz.
+Crafted with painkillers and pointer arithmetic by A. Asaduz.
 
 ---
 
