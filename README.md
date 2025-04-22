@@ -15,6 +15,8 @@ int main() {
     vecodin_append(vi, 10);
     vecodin_append(vi, 20);
     printf("Length: %zu, First: %d\n", vecodin_length(vi), vi[0]);
+    vecodin_delete(vi);
+    return 0;
 }
 ```
 
