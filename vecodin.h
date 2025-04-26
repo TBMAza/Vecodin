@@ -236,7 +236,7 @@
     }
 
 /*
- *  vecodin_cp: copiest the content of 'vec2' into 'vec1';
+ *  vecodin_cp: copies the content of 'vec2' into 'vec1';
  *  beware: the old content of 'vec1', if any, is erased;
  */
 #define vecodin_cp(vec1, vec2) \
