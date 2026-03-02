@@ -292,7 +292,7 @@
             vecodin_##destination##_realloc_buffer = calloc(vecodin_intermediate_destination_size, sizeof(destination[0])); \
             if(!vecodin_##destination##_realloc_buffer) { fprintf(stderr, "[vecodin] [CRITICAL] %s resize failed!\n", #destination); } \
             else { \
-                for(size_t i = 0; i < vecodin_intermediate_destination_curs; ++i) { vecodin_##destination##_realloc_buffer[i] = i < vecodin_##vec1##_curs ? vec1[i] : vec2[i]; } \
+                for(size_t i = 0; i < vecodin_intermediate_destination_curs; ++i) { vecodin_##destination##_realloc_buffer[i] = i < vecodin_##vec1##_curs ? vec1[i] : vec2[i-vecodin_##vec1##_curs]; } \
                 vecodin_##destination##_size = vecodin_intermediate_destination_size; \
                 vecodin_##destination##_curs = vecodin_intermediate_destination_curs; \
                 vecodin_##destination##_length = vecodin_intermediate_destination_length; \
