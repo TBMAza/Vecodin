@@ -139,3 +139,7 @@ Crafted with painkillers and pointer arithmetic by A. Asaduz.
 ---
 
 > “Vecodin — because C deserves vectors too.”
+
+---
+
+> This README is written by Claude AI
